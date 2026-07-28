@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <i class="fa-solid fa-shield-halved"></i>
+    <span>Cyber<b>Dashboard</b></span>
+  </div>
+</header>
+
+<nav class="nav-cards">
+  <button class="nav-card active" data-panel="username" onclick="showPanel('username', this)">
+    <i class="fa-solid fa-user-magnifying-glass"></i>
+    <span>Username Search</span>
+  </button>
+  <button class="nav-card" data-panel="ip" onclick="showPanel('ip', this)">
+    <i class="fa-solid fa-globe"></i>
+    <span>IP Lookup</span>
+  </button>
+  <button class="nav-card" data-panel="domain" onclick="showPanel('domain', this)">
+    <i class="fa-solid fa-server"></i>
+    <span>Domain Intelligence</span>
+  </button>
+  <button class="nav-card" data-panel="scanner" onclick="showPanel('scanner', this)">
+    <i class="fa-solid fa-satellite-dish"></i>
+    <span>Port Scanner</span>
+  </button>
+  <button class="nav-card" data-panel="metadata" onclick="showPanel('metadata', this)">
+    <i class="fa-solid fa-image"></i>
+    <span>Image Metadata</span>
+  </button>
+  <button class="nav-card" data-panel="dns" onclick="showPanel('dns', this)">
+    <i class="fa-solid fa-network-wired"></i>
+    <span>DNS Records</span>
+  </button>
+  <button class="nav-card" data-panel="ssl" onclick="showPanel('ssl', this)">
+    <i class="fa-solid fa-lock"></i>
+    <span>SSL Inspector</span>
+  </button>
+  <button class="nav-card" data-panel="subdomains" onclick="showPanel('subdomains', this)">
+    <i class="fa-solid fa-sitemap"></i>
+    <span>Subdomain Enum</span>
+  </button>
+  <button class="nav-card" data-panel="wayback" onclick="showPanel('wayback', this)">
+    <i class="fa-solid fa-clock-rotate-left"></i>
+    <span>Wayback History</span>
+  </button>
+  <button class="nav-card" data-panel="techstack" onclick="showPanel('techstack', this)">
+    <i class="fa-solid fa-layer-group"></i>
+    <span>Tech Stack</span>
+  </button>
+  <button class="nav-card" data-panel="shodan" onclick="showPanel('shodan', this)">
+    <i class="fa-solid fa-tower-broadcast"></i>
+    <span>Shodan Lookup</span>
+  </button>
+  <button class="nav-card" data-panel="virustotal" onclick="showPanel('virustotal', this)">
+    <i class="fa-solid fa-shield-virus"></i>
+    <span>VirusTotal Lookup</span>
+  </button>
+  <button class="nav-card" data-panel="abuseipdb" onclick="showPanel('abuseipdb', this)">
+    <i class="fa-solid fa-user-shield"></i>
+    <span>AbuseIPDB Check</span>
+  </button>
+  <button class="nav-card" data-panel="emailanalyzer" onclick="showPanel('emailanalyzer', this)">
+    <i class="fa-solid fa-envelope-circle-check"></i>
+    <span>Email Analyzer</span>
+  </button>
+  <button class="nav-card" data-panel="domainrecon" onclick="showPanel('domainrecon', this)">
+    <i class="fa-solid fa-magnifying-glass-location"></i>
+    <span>Domain Recon</span>
+  </button>
+</nav>
+
+<main class="content">
+
+  <section id="username" class="panel active">
+    <h1><i class="fa-solid fa-user-magnifying-glass"></i> Username Search</h1>
+    <div class="search-row">
+      <input type="text" id="usernameInput" placeholder="Enter username">
+      <button class="primary-btn" onclick="searchUsername()"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+    </div>
+    <div id="usernameResult" class="result-area"><p class="placeholder">Results will appear here.</p></div>
+  </section>
+
+  <section id="ip" class="panel">
+    <h1><i class="fa-solid fa-globe"></i> IP Lookup</h1>
+    <div class="search-row">
+      <input type="text" id="ipInput" placeholder="Enter IP address">
+      <button class="primary-btn" onclick="lookupIP()"><i class="fa-solid fa-location-crosshairs"></i> Lookup</button>
+    </div>
+    <div id="ipResult" class="result-area"><p class="placeholder">Results will appear here.</p></div>
+  </section>
+
+  <section id="domain" class="panel">
+    <h1><i class="fa-solid fa-server"></i> Domain Intelligence</h1>
+    <div class="search-row">
+      <input type="text" id="domainInput" placeholder="Enter domain">
+      <button class="primary-btn" onclick="lookupDomain()"><i class="fa-solid fa-magnifying-glass-chart"></i> Analyze</button>
+    </div>
+    <div id="domainResult" class="result-area"><p class="placeholder">Results will appear here.</p></div>
+  </section>
+
+  <section id="scanner" class="panel">
+    <h1><i class="fa-solid fa-satellite-dish"></i> Port Scanner</h1>
+    <div class="search-row">
+      <input type="text" id="scannerInput" placeholder="Enter IP">
+      <button class="primary-btn" onclick="scanPorts()"><i class="fa-solid fa-bolt"></i> Scan</button>
+    </div>
+    <div id="scannerResult" class="result-area"><p class="placeholder">Results will appear here.</p></div>
+  </section>
+
+  <section id="metadata" class="panel">
+    <h1><i class="fa-solid fa-image"></i> Image Metadata Extractor</h1>
+    <div class="search-row">
+      <input type="file" id="metadataFile" accept="image/*">
+      <button class="primary-btn" onclick="extractMetadata()"><i class="fa-solid fa-magnifying-glass"></i> Extract Metadata</button>
+    </div>
+    <div id="metadataResult" class="result-area"><p class="placeholder">Metadata will appear here.</p></div>
+  </section>
+
+  <section id="dns" class="panel">
+    <h1><i class="fa-solid fa-network-wired"></i> DNS Records Lookup</h1>
+    <div class="search-row">
+      <input type="text" id="dnsInput" placeholder="Enter domain">
+      <button class="primary-btn" onclick="lookupDNS()"><i class="fa-solid fa-magnifying-glass"></i> Lookup</button>
+    </div>
+    <div id="dnsResult" class="result-area"><p class="placeholder">Records will appear here.</p></div>
+  </section>
+
+  <section id="ssl" class="panel">
+    <h1><i class="fa-solid fa-lock"></i> SSL/TLS Certificate Inspector</h1>
+    <div class="search-row">
+      <input type="text" id="sslInput" placeholder="Enter domain">
+      <button class="primary-btn" onclick="inspectSSL()"><i class="fa-solid fa-magnifying-glass"></i> Inspect</button>
+    </div>
+    <div id="sslResult" class="result-area"><p class="placeholder">Certificate details will appear here.</p></div>
+  </section>
+
+  <section id="subdomains" class="panel">
+    <h1><i class="fa-solid fa-sitemap"></i> Subdomain Enumeration</h1>
+    <div class="search-row">
+      <input type="text" id="subdomainsInput" placeholder="Enter domain (e.g. example.com)">
+      <button class="primary-btn" onclick="enumerateSubdomains()"><i class="fa-solid fa-magnifying-glass"></i> Enumerate</button>
+    </div>
+    <div id="subdomainsResult" class="result-area"><p class="placeholder">Discovered subdomains will appear here.</p></div>
+  </section>
+
+  <section id="wayback" class="panel">
+    <h1><i class="fa-solid fa-clock-rotate-left"></i> Wayback Machine History</h1>
+    <div class="search-row">
+      <input type="text" id="waybackInput" placeholder="Enter domain (e.g. example.com)">
+      <button class="primary-btn" onclick="checkWayback()"><i class="fa-solid fa-magnifying-glass"></i> Check History</button>
+    </div>
+    <div id="waybackResult" class="result-area"><p class="placeholder">Archive history will appear here.</p></div>
+  </section>
+
+  <section id="techstack" class="panel">
+    <h1><i class="fa-solid fa-layer-group"></i> Website Tech Stack Fingerprinter</h1>
+    <div class="search-row">
+      <input type="text" id="techstackInput" placeholder="Enter domain (e.g. example.com)">
+      <button class="primary-btn" onclick="fingerprintTechStack()"><i class="fa-solid fa-magnifying-glass"></i> Analyze</button>
+    </div>
+    <div id="techstackResult" class="result-area"><p class="placeholder">Detected technologies will appear here.</p></div>
+  </section>
+
+  <section id="shodan" class="panel">
+    <h1><i class="fa-solid fa-tower-broadcast"></i> Shodan Device Lookup</h1>
+    <p class="panel-subtitle">Search Shodan's database of internet-connected devices for a given IP.</p>
+    <div class="search-row">
+      <input type="text" id="shodanInput" placeholder="Enter IP address" onkeydown="if(event.key==='Enter') lookupShodan()">
+      <button class="primary-btn" onclick="lookupShodan()"><i class="fa-solid fa-magnifying-glass"></i> Lookup</button>
+    </div>
+    <div id="shodanResult" class="result-area"><p class="placeholder">Device details will appear here.</p></div>
+  </section>
+
+  <section id="virustotal" class="panel">
+    <h1><i class="fa-solid fa-shield-virus"></i> VirusTotal Reputation Lookup</h1>
+    <p class="panel-subtitle">Check a domain, IP, URL, or file hash (MD5/SHA1/SHA256) against VirusTotal's threat intel.</p>
+    <div class="search-row">
+      <input type="text" id="virustotalInput" placeholder="Enter domain, IP, URL, or file hash" onkeydown="if(event.key==='Enter') lookupVirusTotal()">
+      <button class="primary-btn" onclick="lookupVirusTotal()"><i class="fa-solid fa-magnifying-glass"></i> Check</button>
+    </div>
+    <div id="virustotalResult" class="result-area"><p class="placeholder">Reputation data will appear here.</p></div>
+  </section>
+
+  <section id="abuseipdb" class="panel">
+    <h1><i class="fa-solid fa-user-shield"></i> AbuseIPDB Check</h1>
+    <p class="panel-subtitle">Check an IP's abuse confidence score and report history from AbuseIPDB.</p>
+    <div class="search-row">
+      <input type="text" id="abuseipdbInput" placeholder="Enter IP address" onkeydown="if(event.key==='Enter') lookupAbuseIPDB()">
+      <button class="primary-btn" onclick="lookupAbuseIPDB()"><i class="fa-solid fa-magnifying-glass"></i> Check</button>
+    </div>
+    <div id="abuseipdbResult" class="result-area"><p class="placeholder">Abuse report data will appear here.</p></div>
+  </section>
+
+  <section id="emailanalyzer" class="panel">
+    <h1><i class="fa-solid fa-envelope-circle-check"></i> Email Spam/Phishing Analyzer</h1>
+    <p class="panel-subtitle">Paste the full raw email source (headers included — use "View Original" / "Show Source" in your mail client) to get a 0-10 risk score with a transparent breakdown.</p>
+    <div class="email-input-row">
+      <textarea id="emailInput" rows="12" placeholder="Paste raw email source here, including headers (From, Received, Authentication-Results, etc.)"></textarea>
+      <button class="primary-btn" onclick="analyzeEmail()"><i class="fa-solid fa-magnifying-glass"></i> Analyze</button>
+    </div>
+    <div id="emailanalyzerResult" class="result-area"><p class="placeholder">Analysis will appear here.</p></div>
+  </section>
+
+  <section id="domainrecon" class="panel">
+    <h1><i class="fa-solid fa-magnifying-glass-location"></i> Domain Recon Toolkit</h1>
+
+    <h3 class="sub-heading"><i class="fa-solid fa-magnifying-glass"></i> Google Dorking Helper</h3>
+    <p class="panel-subtitle">Generates common Google dork search URLs for a target domain — no API needed, opens directly in Google.</p>
+    <div class="search-row">
+      <input type="text" id="dorkInput" placeholder="Enter domain (e.g. example.com)" onkeydown="if(event.key==='Enter') generateDorks()">
+      <button class="primary-btn" onclick="generateDorks()"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate</button>
+    </div>
+    <div id="dorkResult" class="result-area"><p class="placeholder">Dork links will appear here.</p></div>
+
+    <h3 class="sub-heading"><i class="fa-solid fa-user-secret"></i> Typosquat / Lookalike Domain Checker</h3>
+    <p class="panel-subtitle">Generates common typo variants of a domain and checks which are actually registered.</p>
+    <div class="search-row">
+      <input type="text" id="typosquatInput" placeholder="Enter domain (e.g. example.com)" onkeydown="if(event.key==='Enter') checkTyposquat()">
+      <button class="primary-btn" onclick="checkTyposquat()"><i class="fa-solid fa-magnifying-glass"></i> Check</button>
+    </div>
+    <div id="typosquatResult" class="result-area"><p class="placeholder">Results will appear here.</p></div>
+
+    <h3 class="sub-heading"><i class="fa-solid fa-id-card"></i> Reverse WHOIS</h3>
+    <p class="panel-subtitle">Find other domains registered by the same email/registrant. Requires a paid WhoisXMLAPI key (REVERSE_WHOIS_API_KEY) — shows a config message if not set up.</p>
+    <div class="search-row">
+      <input type="text" id="reversewhoisInput" placeholder="Enter registrant email or name" onkeydown="if(event.key==='Enter') lookupReverseWhois()">
+      <button class="primary-btn" onclick="lookupReverseWhois()"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+    </div>
+    <div id="reversewhoisResult" class="result-area"><p class="placeholder">Results will appear here.</p></div>
+
+  </section>
+
+</main>
+
+
+<script src="app.js"></script>
+</body>
+</html>
