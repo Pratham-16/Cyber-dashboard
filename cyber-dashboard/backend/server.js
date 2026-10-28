@@ -9,18 +9,37 @@ const path = require('path');
 const dns = require('dns').promises;
 const tls = require('tls');
 const { simpleParser } = require('mailparser');
+const fs = require('fs');
 
 const app = express();
 
+const uploadsDir = path.join(__dirname, 'uploads');
+fs.mkdirSync(uploadsDir, { recursive: true });
+
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
+  destination: (req, file, cb) => cb(null, uploadsDir),
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname); // keep .png/.jpg/etc
     const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
     cb(null, unique + ext);
   }
 });
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype || !file.mimetype.startsWith('image/')) {
+      return cb(new Error('Please upload an image file.'));
+    }
+    cb(null, true);
+  }
+});
+function handleImageUpload(req, res, next) {
+  upload.single('image')(req, res, (err) => {
+    if (err) return res.status(400).json({ error: err.message });
+    next();
+  });
+}
 
 app.use(cors());
 app.use(express.json());
@@ -106,7 +125,7 @@ app.get('/api/scanner/:ip', (req, res) => {
 });
 
 // Image Metadata Extractor
-app.post('/api/metadata', upload.single('image'), (req, res) => {
+app.post('/api/metadata', handleImageUpload, (req, res) => {
   if (!req.file) {
     return res.json({ error: 'No image uploaded.' });
   }

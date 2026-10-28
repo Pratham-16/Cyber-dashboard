@@ -1,3 +1,16 @@
+// Keep the frontend usable from its static dev server while allowing deployments
+// to point at a different API host with `window.CYBER_API_BASE`.
+const API_BASE = window.CYBER_API_BASE || 'http://localhost:5000/api';
+const nativeFetch = window.fetch.bind(window);
+window.fetch = async (input, options) => {
+  const target = typeof input === 'string' ? input.replace('http://localhost:5000/api', API_BASE) : input;
+  try {
+    return await nativeFetch(target, options);
+  } catch (error) {
+    return { ok: false, json: async () => ({ error: `Could not reach the API. Make sure the backend is running at ${API_BASE}. (${error.message})` }) };
+  }
+};
+
 function showPanel(id, btn) {
   document.querySelectorAll('.panel').forEach(panel => {
     panel.classList.remove('active');
@@ -83,8 +96,16 @@ function escapeHtml(str) {
 
 function showLoading(containerId) {
   document.getElementById(containerId).innerHTML =
-    `<p class="placeholder"><i class="fa-solid fa-spinner fa-spin"></i> Working...</p>`;
+    `<p class="placeholder" role="status"><i class="fa-solid fa-spinner fa-spin"></i> Working…</p>`;
 }
+
+// Support Enter-to-search consistently across all single-line research fields.
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Enter' || event.target.tagName !== 'INPUT' || event.target.type !== 'text') return;
+  const row = event.target.closest('.search-row');
+  const button = row && row.querySelector('.primary-btn');
+  if (button) { event.preventDefault(); button.click(); }
+});
 
 async function searchUsername() {
   const username = document.getElementById('usernameInput').value;
